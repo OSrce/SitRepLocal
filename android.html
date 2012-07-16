@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+
+<title>SitRep1.0</title>
+
+<script type="text/javascript" src="lib/dojo/dojo.js" data-dojo-config="'async':true,'parseOnLoad':true,'packages':[{'name':'maqetta','location':'../../maqetta'},{'name':'gridx','location':'../gridx'},{'name':'clipart','location':'../../clipart'},{'name':'shapes','location':'../../shapes'},{'name':'jquery-ui','location':'../../jquery-ui'},{'name':'yui','location':'../../yui'}]"></script>
+<script type="text/javascript">
+require([
+  "dijit/dijit",
+  "dojo/parser",
+  "dojox/mobile",
+  "dojox/mobile/deviceTheme",
+  "dojox/mobile/compat",
+  "dojo/hash",
+  "dojox/io/xhrScriptPlugin",
+  "dojo/data/ItemFileReadStore",
+  "dojox/mobile/RoundRectDataList",
+  "dijit/form/DataList",
+  "dojox/mobile/ComboBox",
+  "dojox/mobile/CheckBox",
+  "dijit/layout/ContentPane",
+  "dijit/form/Form",
+  "dojox/mobile/TextBox",
+  "dojox/mobile/Button",
+  "dojox/mobile/RoundRectCategory",
+  "dojox/widget/Standby",
+  "dojox/mobile/TabBar",
+  "dojox/mobile/TabBarButton",
+  "dojox/mobile/ScrollableView"
+]);
+
+
+/// BEGIN - WHY DO WE NEED THIS
+//This makes it work for dojo.XXX calls, but I don't know why
+//Dojo 1.7 (AMD)
+require(["dojo"], function(dojo){
+
+dojo.require("dijit.form.MultiSelect");
+
+
+});
+////TO HERE
+
+
+///NOTE ON dojox/mobile/parser (http://bugs.dojotoolkit.org/ticket/13386) It shouldn't called onclick twice, like dojo/parser does
+/// END - WHY DO WE NEED THIS
+
+
+</script>
+
+
+<style>
+@import "lib/dijit/themes/android/android.css";@import "app.css";
+@import "lib/dojox/mobile/themes/android/android.css";
+@import "lib/dojox/mobile/themes/android/android-compat.css";
+</style>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"></meta>
+</head>
+<body class="android" data-maqetta-device="android_480x800" dvFlowLayout="true" data-davinci-ws="collapse" id="myapp">
+ <div data-dojo-type="dojox.mobile.View" id="root_view"  style="height: 100%;" selected="selected">
+
+<h1 label="SitRep 1.0" data-dojo-type="dojox.mobile.Heading" class="mblIconContentHeading"></h1>
+  <table style="width: 100;">
+    <tbody>
+    <tr>
+        <td>
+          <h3 style="text-align: center;">
+            Welcome to SitRep.</h3>
+        </td>
+      </tr>
+      <tr align="center" style="text-align: center;">
+        <td>
+          <img src="SitRepLogo.png" width="60%"></img>
+        </td>
+      </tr>
+    </tbody>
+    </table>
+  <fieldset style="border: 5px groove threedface; margin: 2px; padding: 0.75em;">
+  <legend>
+      Login</legend>
+<form action="javascript:connectToServer()" method="get">
+    <table style="width: 100;">
+   <tbody>
+       <tr>
+         <td>
+           <label id="selectserver" style="width: 20%;">
+             Select server:</label>
+         </td>
+         <td>
+ 
+ 
+ 
+ <script type="text/javascript">
+
+
+
+///////////////////////////////updateUserandPass()
+function updateUserandPass(index){
+
+		//var lis = document.getElementById("selectbox").getElementsByTagName("li");
+		currentservernum=index;
+	   	document.getElementById("userbox").value=myservers[index].username;
+		document.getElementById("passbox").value=myservers[index].password;	
+}
+
+
+
+//CHECK FILE HERE TO GET SERVERS
+//blah blah blah
+
+//hardcoded list of servers 
+var i;
+var myservers = new Array();
+
+myservers = [
+{ "url":"nyc.sitrep.org", "city":"New York", "username":"Jon","password":"heybaby" },
+{"url":"lax.sitrep.org", "city":"Los Angeles", "username":"Alex","password":"secret" },
+{"url":"chi.sitrep.org", "city":"Chicago", "username":"Joey","password":"fudge" }
+] 
+
+
+var serversfound=myservers.length;
+//serversfound=0;
+//Change what's shown based on the number of servers found
+if(serversfound==0) {
+
+	myservers = [{ "url":"demo.sitrep.org", "city":"New York", "username":"SitRepDemo","password":"SRDemo115" }]
+	serversfound=1;
+	//document.write('<input type="text" data-dojo-type="dojox.mobile.TextBox" value="demo.sitrep.org"><' + '/input>');
+	//document.getElementById("selectserver").innerHTML="Server:";
+	
+
+}
+
+dojo.ready(function(){if(serversfound<2){updateUserandPass(0);}});
+
+		document.write('<select id="selectbox" onchange="updateUserandPass(this.selectedIndex)">');
+		for ( i=0;i<myservers.length;i++)
+	{
+		//OPTIONTEST
+		//document.write('<option id="option'+ i + '" value="' + i + '">' + myservers[i].url + '<'+ '/option>');
+		document.write('<option>' + myservers[i].url + '<'+ '/option>');
+	}
+	document.write("<" + "/select>");
+		
+		document.getElementById("selectserver").innerHTML="Select server:";
+
+
+/////////////////////connectToServer()
+function connectToServer() { 
+
+    var standby = new dojox.widget.Standby({ 
+        target: "root_view" 
+    }); 
+    document.body.appendChild(standby.domNode); 
+    standby.startup(); 
+
+	standby.show(); 
+	
+		/////PUT SOME CODE TO CONNECT TO ACTUALLY CONNECT TO SERVER
+
+		// VARS we care about :
+/*	
+		console.log("TEST TEST SERVER NUM:"+currentservernum);	
+		console.log("TEST TEST SERVER URL:"+myservers[currentservernum].url);	
+		console.log("TEST TEST USER:"+myservers[currentservernum].username);	
+		console.log("TEST TEST PASS:"+myservers[currentservernum].password);	
+*/	
+		var serverUrl = "https://"+myservers[currentservernum].url+"/login/index/embeddedlogin";
+		var theData = { "username": myservers[currentservernum].username, "password":myservers[currentservernum].password };
+
+		var xhrArgs = {
+		url: serverUrl,
+		postData: dojo.toJson(theData),
+		handleAs: 'json',
+		headers: { 'Content-Type' : 'application/json' },
+		load: function(data) {
+			console.log("Finished auth request");
+			window.location.href = "/home";
+
+			}
+		}
+		;
+		var deferred = dojo.xhrPost(xhrArgs);
+
+}
+
+
+	</script> 
+
+         </td><td></td></tr>
+       <tr><td>
+<label>
+  Username:</label>
+        </td>
+         <td>
+<input type="text" id="userbox" data-dojo-type="dojox.mobile.TextBox"></input>
+        </td><td></td></tr>
+       <tr>
+<td>
+<label>
+  Password:</label>
+        </td>
+<td>
+<input type="password" id="passbox" data-dojo-type="dojox.mobile.TextBox"></input>
+        </td>
+<td>
+<input type="checkbox" data-dojo-type="dojox.mobile.CheckBox">Remember me</input>
+        </td>
+       </tr>
+       <tr>
+<td></td>
+<td>
+<button type="submit" data-dojo-type="dojox.mobile.Button">
+  Login</button>
+        </td> <td></td> </tr>
+     </tbody>
+   </table>
+   
+   
+   <script>
+   	if(serversfound>0) {
+   		document.getElementById("userbox").value=myservers[0].username;
+		document.getElementById("passbox").value=myservers[0].password;
+   	}
+   </script>
+   
+   </form>
+    </fieldset>
+    
+    
+    <ul data-dojo-type="dojox.mobile.RoundRectList">
+    	<li data-dojo-type="dojox.mobile.ListItem" moveTo="server_view">Edit Servers</li>
+    	<li data-dojo-type="dojox.mobile.ListItem" moveTo="about_view">About</li>
+    </ul>
+    
+  </div>
+
+
+
+
+   <div data-dojo-type="dojox.mobile.View" id="about_view" style="height: 100%; display: none;">
+  	<h1 label="About" data-dojo-type="dojox.mobile.Heading" back="Home" moveTo="root_view"></h1>
+  			<label size=5>SITREP</label><br>
+		<label size=3>THE OPEN SOURCE SOLUTION FOR PUBLIC SAFETY</label>
+		<P>
+	SitRep came to be because of the lack of easy to use tools for collaborative work on spatial and temporal data sets used for planning purposes in public safety. Development naturally progressed into an operational tool for the management of assets, and monitoring of events and as an analytical tool for after-action-reports because of the void of any tools that fulfilled these needs in public safety.
+  
+  </div>
+  
+  
+  
+  
+  
+  <!--##################################### server_view ###################################-->
+ <div data-dojo-type="dojox.mobile.ScrollableView" id="server_view" style="height: 100%; display: none;">
+<h1 label="Edit Servers" data-dojo-type="dojox.mobile.Heading" back="Home" moveTo="root_view">
+<div data-dojo-type="dojox.mobile.ToolBarButton" class="mblDomButtonWhitePlus" data-dojo-props="onClick: function(){addServer(serversfound);}" style="float:right;"></div>
+
+</h1>
+<div id="serverviewhtml"></div>
+
+
+	    		<ul id="serverlist" data-dojo-type="dojox.mobile.RoundRectList">
+	    		</ul>
+
+	 <script type="text/javascript">
+	 
+	 
+	 
+	 
+	 var currentservernum=0; //currentservernum is the server that is selected in the select box on the login page
+	 var clickedservernum=0; //the server that is clicked in the edit menu
+	 var deletepressed=0; //indicates if the delete button has been clicked
+
+//////////////////////////////////clickServer() 
+	 function clickserver(a)
+		{
+			
+		document.getElementById("editservername").value=myservers[a].url;
+		document.getElementById("editusername").value=myservers[a].username;
+		document.getElementById("editpassword").value=myservers[a].password;
+		document.getElementById("editcity").value=myservers[a].city;
+		
+		 
+		// currentservernum=a;
+		clickedservernum=a;
+		var w = dijit.byId('server_view');
+		w.performTransition('server_data_view',1,"slide",null);	
+			
+		}//End of clickserver
+	
+
+////////////////////////////////////addToSelectBox()
+function addToSelectBox(thisservernum){
+	//Add to select box on root_view
+		var select = document.getElementById("selectbox");
+		//select.options[select.options.length] = new Option({label: myservers[thisservernum].url}, thisservernum);
+		var opt = document.createElement("option");
+    	//OPTIONTEST
+    	//  	opt.value = myservers[thisservernum].url ;
+    	//opt.id = "option" + thisservernum;
+    	opt.innerText = myservers[thisservernum].url;
+    	//opt.value=thisservernum;
+    	select.appendChild(opt);	
+}
+
+
+//////////////////////////////////addServer()
+	function addServer(num){
+	//this gets called twice if you use "onclick=" instead of data-dojo-props="onClick:function(){...}"
+		if(deletepressed==1){deleteserverprep();}
+
+		var listContainer=dijit.byId("serverlist");
+		myservers.push({ "url":"edit.sitrep.org", "city":"Anytown", "username":"","password":""});
+		var thisservernum=myservers.length - 1;
+		
+		
+   		listItem = new dojox.mobile.ListItem({ 
+   			label: myservers[thisservernum].url, 
+   			class: "mblListItem",
+   			value: thisservernum,
+   			tag: "li",
+   			id: 'servernum' + thisservernum,
+   			"clickable": "true",                           
+             onClick: function(){ 
+             					if(deletepressed==0){
+                                 clickserver(this.value);
+                                 } else {
+                                 	deleteserver(this.value);
+                                 }
+                                 
+                                 //end of function
+                                 }
+   			 			
+		}); 
+		
+		//Add to server_view
+		listContainer.addChild(listItem); 
+		//I don't understand why it doesn't work if I just include this above rightIcon: "mblDomButtonBlueCircleArrow"
+		//But I guess I have to set it this way
+		//dijit.byId('servernum' + thisservernum).set("rightIcon","mblDomButtonBlueCircleArrow");
+		//I'm giving up on the blue cirlce
+	
+		
+		//and this    			onclick: "clickserver(" + thisservernum + ")",
+		addToSelectBox(thisservernum);
+		
+
+
+		//Move to edit the new server
+		//document.getElementById("editservername").value=myservers[thisservernum].url;
+		//document.getElementById("editusername").value=myservers[thisservernum].username;
+		//document.getElementById("editpassword").value=myservers[thisservernum].password;
+		//document.getElementById("editcity").value=myservers[thisservernum].city;
+		
+		 
+		//currentservernum=thisservernum;
+		//document.getElementById("selectbox").options[thisservernum].innerHTML=myservers[thisservernum].url;
+		//var w = dijit.byId('server_view');
+		//w.performTransition('server_data_view',1,"slide",null);
+		clickserver(thisservernum);
+}
+
+
+
+
+///////////////////////////
+function deleteserverprep(){
+
+	if(deletepressed==0){
+
+		for ( i=0;i<myservers.length;i++)
+		{
+			//display red circle
+			dijit.byId('servernum' + i).set("icon", "mblDomButtonRedCircleMinus");
+			
+			//dojo.style(dijit.byId('servernum'+i).iconNode, {visibility:'visible'});
+			//dojo.style(dijit.byId('servernum'+i).rightIconNode, {visibility:'hidden'});
+			dijit.byId('servernum' + i).iconNode.style.display = "inline";
+			dijit.byId('servernum' + i).rightIconNode.style.display = "none";
+		}
+
+		dijit.byId("deletebutton").set("style=","background-color: red");
+		dijit.byId('deletebutton').set("label","Cancel");	
+		
+		
+		
+		deletepressed=1;
+
+		//alert(deletepressed);
+	} else {
+		
+			dijit.byId('deletebutton').set("label","Delete");
+			for ( i=0;i<myservers.length;i++)
+		{
+			//dijit.byId('servernum' + i).iconNode.style.display = "none";
+			//dojo.style(dijit.byId('servernum'+i).iconNode, {visibility:'hidden'});
+			//dojo.style(dijit.byId('servernum'+i).rightIconNode, {visibility:'visible'});
+			//dijit.byId('servernum' + i).iconNode.visibility = "hidden";
+			
+			//hide red cirlce
+			dijit.byId('servernum' + i).iconNode.style.display = "none";
+			dijit.byId('servernum' + i).rightIconNode.style.display = "inline";
+		}
+
+
+			deletepressed=0;
+			//get rid of icons ...???
+			//alert(deletepressed);
+	}
+	
+	
+}
+
+function deleteserver(a){
+
+	deleteserverprep();
+	//remove from myservers
+
+	//Get rid of all items in the list (remove dojo and dijit references)
+	
+	for ( i=0;i<myservers.length;i++)
+	{
+		dojo.destroy(dijit.byId("servernum" + i));
+		dijit.byId("servernum" + i).destroyRecursive();
+		//element = document.getElementById("option" + i);
+		//element.parentNode.removeChild(element);
+		//OPTIONTEST
+		//document.getElementById("selectbox").removeChild(document.getElementById("selectbox").options[i]);
+	}
+	
+
+	//Take items out of array
+	myservers.splice(a,1);
+
+	//remake Server List
+	makeServerList();
+
+	//remove from login page
+	//
+	//$("#selectBox option[value='option1']").removeChild();
+	//select = document.getElementById("selectbox");
+	//remove from 
+
+	document.getElementById("selectbox").options.length = myservers.length;
+	for ( i=0;i<myservers.length;i++)
+	{
+		document.getElementById("selectbox").options[i].innerHTML=myservers[i].url;
+	}
+	
+	
+	currentservernum=document.getElementById("selectbox").selectedIndex
+	updateUserandPass(document.getElementById("selectbox").selectedIndex);
+		
+}
+
+
+///////////////////////////////////////////saveserver()	
+	function saveserver()
+		{
+			
+		//Write this to file ....
+		//xxxxxxxx
+		
+
+		//Add to myservers
+		myservers[clickedservernum].url=document.getElementById("editservername").value	
+		myservers[clickedservernum].city=document.getElementById("editcity").value
+		myservers[clickedservernum].username=document.getElementById("editusername").value
+		myservers[clickedservernum].password=document.getElementById("editpassword").value
+		
+		//Change in edit servers
+		dijit.byId('servernum' + clickedservernum).set("label",myservers[clickedservernum].url);
+		
+		//Change on login page
+		document.getElementById("selectbox").options[clickedservernum].innerHTML=myservers[clickedservernum].url;
+		updateUserandPass(document.getElementById("selectbox").selectedIndex);
+		
+		//Move back to Edit Server page
+		var w = dijit.byId('server_data_view');
+		w.performTransition('server_view',-1,"slide",null);
+	
+		}//End of saveserver
+	 
+	
+	
+		function makeServerList(){
+			for (k=0;k<myservers.length;k++){
+				//alert('servernum' + k + "is " + myservers[k].url);
+				listItem = new dojox.mobile.ListItem({ 
+				label: myservers[k].url, 
+				class: "mblListItem",
+				value: k,
+				tag: "li",
+				id: 'servernum' + k,
+				"clickable": "true",                           
+				 onClick: function(){ 
+				 
+									if(deletepressed==0){
+	
+									 clickserver(this.value);
+									
+									 } else {
+										deleteserver(this.value);
+	
+									 }
+									 
+									 //end of function
+									 }
+							
+			}); 
+			
+				//Add to server_view
+   			
+			dijit.byId("serverlist").addChild(listItem); }		
+	    	
+    	}
+	 
+	 
+	 //Make all the server buttons
+		//document.write('<ul id="serverlist" data-dojo-type="dojox.mobile.RoundRectList">');
+		
+		dojo.ready( function(){ makeServerList();});
+		
+
+
+	</script>
+	
+	<ul data-dojo-type="dojox.mobile.TabBar" data-dojo-props='barType:"segmentedControl"' fixed="bottom" >
+ 		 <li label="Delete" id="deletebutton" data-dojo-type="dojox.mobile.TabBarButton" data-dojo-props="onClick:function(){deleteserverprep();}"></li>
+	</ul>
+ 
+
+
+	<!-- End of server_view-->
+</div>
+	
+	
+	
+	
+	
+	<!--############################# server_data_view ####################################-->	
+<div data-dojo-type="dojox.mobile.View" id="server_data_view" style="height: 100%; display: none;">
+
+<h1 label="Edit Server" back="Back" moveto="server_view" data-dojo-type="dojox.mobile.Heading"></h1>
+  <fieldset style="border: 5px groove threedface; margin: 2px; padding: 0.75em;">
+  <legend>
+      Edit</legend>
+<div id="editingserver">
+
+
+    <table style="width: 100;">
+   <tbody>
+       <tr>
+         <td>
+           <label style="width: 20%;">
+              Server:</label>
+         </td><td><input type="text" id="editservername" data-dojo-type="dojox.mobile.TextBox"></input>
+	</td><td></td></tr>
+	<tr>
+         <td><label>
+            City:</label></td><td><input type="text" id="editcity" data-dojo-type="dojox.mobile.TextBox"></input>
+        </td><td></td></tr>
+       <tr>
+         <td><label>
+            Username:</label></td><td><input type="text" id="editusername" data-dojo-type="dojox.mobile.TextBox"></input>
+        </td><td></td></tr>
+       <tr>
+         <td><label>Password:</label></td><td><input type="text" id="editpassword" data-dojo-type="dojox.mobile.TextBox"></input>
+        </td><td>
+        </td></tr>
+       <tr> <td></td><td>
+  				<button data-dojo-type="dojox.mobile.Button" id="savebutton" data-dojo-props="onClick:function(){saveserver();}">Save</button>
+           
+        </td><td></td> </tr>
+     </tbody>
+   </table>
+   
+   </div>
+
+
+</div>
+		
+ <div data-dojo-type="dojox.mobile.View" id="lax_view" style="height: 100%; display: none;"></div>
+  
+  
+ </body>
+</html>
+
