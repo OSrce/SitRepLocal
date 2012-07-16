@@ -2,17 +2,12 @@
 <html>
 <head>
 <meta charset="utf-8"/>
-<link rel="stylesheet" type="text/css" href="themes/blackberry/blackberry.css">
-<link rel="stylesheet" type="text/css" href="lib/dojo/dojox/mobile/themes/blackberry/blackberry.css">
-<link rel="stylesheet" type="text/css" href="lib/dojo/dojox/mobile/themes/blackberry/blackberry-compat.css">
 <title>SitRep1.0</title>
-<script type="text/javascript" src="lib/dojo/dojo/dojo.js" data-dojo-config="'async':true,'parseOnLoad':true,'packages':[{'name':'maqetta','location':'../../maqetta'},{'name':'gridx','location':'../gridx'},{'name':'clipart','location':'../../clipart'},{'name':'shapes','location':'../../shapes'},{'name':'jquery-ui','location':'../../jquery-ui'},{'name':'yui','location':'../../yui'}]"></script>
+<script type="text/javascript" src="lib/dojo/dojo.js" data-dojo-config="'async':true,'parseOnLoad':true,'packages':[{'name':'maqetta','location':'../../maqetta'},{'name':'gridx','location':'../gridx'},{'name':'clipart','location':'../../clipart'},{'name':'shapes','location':'../../shapes'},{'name':'jquery-ui','location':'../../jquery-ui'},{'name':'yui','location':'../../yui'}]"></script>
 <script type="text/javascript">
 require([
   "dijit/dijit",
   "dojo/parser",
-  "maqetta/space",
-  "maqetta/AppStates",
   "dojox/mobile",
   "dojox/mobile/deviceTheme",
   "dojox/mobile/compat",
@@ -50,6 +45,12 @@ dojo.require("dijit.form.MultiSelect");
 
 </script>
 
+<style>
+@import "lib/dijit/themes/blackberry/blackberry.css";@import "app.css";
+@import "lib/dojox/mobile/themes/blackberry/blackberry.css";
+@import "lib/dojox/mobile/themes/blackberry/blackberry-compat.css";
+</style>
+
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"></meta>
 </head>
@@ -67,7 +68,7 @@ dojo.require("dijit.form.MultiSelect");
       </tr>
       <tr align="center" style="text-align: center;">
         <td>
-          <img src="SItRepLogo.png" width="60%"></img>
+          <img src="SitRepLogo.png" width="60%"></img>
         </td>
       </tr>
     </tbody>
