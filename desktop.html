@@ -98,7 +98,15 @@ dojo.require("dijit.form.MultiSelect");
  
  <script type="text/javascript">
 
+	require(['dojo/_base/unload'],function(baseUnload) {
+		var unLoad = function() {
+			alert("Local page unloading.");
+			localStorage.myservers = myservers;
+		}
+		alert("test1");
 
+		baseUnload.addOnUnload(window, "unLoad");
+	});
 
 ///////////////////////////////updateUserandPass()
 function updateUserandPass(index){
@@ -120,15 +128,19 @@ function updateUserandPass(index){
 //CHECK FILE HERE TO GET SERVERS
 //blah blah blah
 
-//hardcoded list of servers 
 var i;
 var myservers = new Array();
 
-myservers = [
+//myservers = [
 //{ "url":"nyc.sitrep.org", "city":"New York", "username":"Jon","password":"heybaby" },
 //{"url":"lax.sitrep.org", "city":"Los Angeles", "username":"Alex","password":"secret" },
 //{"url":"chi.sitrep.org", "city":"Chicago", "username":"Joey","password":"fudge" }
-] 
+//] 
+
+if ( localStorage.myservers) {
+	myservers = localStorage.myservers;
+}
+
 
 
 var serversfound=myservers.length;
@@ -161,6 +173,7 @@ dojo.ready(function(){updateUserandPass(document.getElementById("selectbox").sel
 /////////////////////connectToServer()
 function connectToServer() { 
 
+		document.getElementById("loginfeedback").innerHTML="";
     var standby = new dojox.widget.Standby({ 
         target: "root_view" 
     }); 
@@ -189,6 +202,7 @@ function connectToServer() {
 		headers: { 'Content-Type' : 'application/json' },
 		load: function(data) {
 			console.log("Finished auth request");
+
 			standby.hide(); 
 			if(data != null && data.authenticated != null && data.authorized != null) {
 				if(data.authenticated == true && data.authorized == true) {
@@ -475,7 +489,7 @@ function deleteserver(a){
 		document.write("<" + "/select>");
 		document.write("<" + "/td><" + "/tr>");
 
-		
+	
 	</script>
 	
 		<tr><td>
