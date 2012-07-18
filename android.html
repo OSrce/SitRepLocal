@@ -98,6 +98,18 @@ dojo.require("dijit.form.MultiSelect");
  <script type="text/javascript">
 
 
+		function saveToLocalStorage() {
+			localStorage.myservers_count = myservers.length;
+			for(var i in myservers) {
+				localStorage["myservers_"+i]= dojo.toJson(myservers[i]);
+				console.log("LocalStorage : myservers_"+i+" VALUE="+dojo.toJson(myservers[i]) );
+			}
+			return;
+		}
+
+	dojo.addOnUnload(saveToLocalStorage);
+
+
 
 ///////////////////////////////updateUserandPass()
 function updateUserandPass(index){
@@ -108,21 +120,28 @@ function updateUserandPass(index){
 		document.getElementById("passbox").value=myservers[index].password;	
 }
 
+//CHECK FILE HERE TO GET SERVER INFO FOR THE VERY FIRST TIME WE RUN.
 
-
-//CHECK FILE HERE TO GET SERVERS
-//blah blah blah
-
-//hardcoded list of servers 
 var i;
-var myservers = new Array();
+myservers = new Array();
 
-myservers = [
-{ "url":"nyc.sitrep.org", "city":"New York", "username":"Jon","password":"heybaby" },
-{"url":"lax.sitrep.org", "city":"Los Angeles", "username":"Alex","password":"secret" },
-{"url":"chi.sitrep.org", "city":"Chicago", "username":"Joey","password":"fudge" }
-] 
+//myservers = [
+//{ "url":"nyc.sitrep.org", "city":"New York", "username":"Jon","password":"heybaby" },
+//{"url":"lax.sitrep.org", "city":"Los Angeles", "username":"Alex","password":"secret" },
+//{"url":"chi.sitrep.org", "city":"Chicago", "username":"Joey","password":"fudge" }
+//] 
 
+var myservers_count = 0;
+
+if ( localStorage.myservers_count != null) {
+	myservers_count = localStorage.myservers_count;
+	for(var i=0;i<myservers_count; i++) {
+		if(localStorage["myservers_"+i] != null) {
+			myservers[i] = dojo.fromJson( localStorage["myservers_"+i] );
+			console.log("TEST5="+localStorage["myservers_"+i]);
+		}
+	}
+}
 
 var serversfound=myservers.length;
 //serversfound=0;

@@ -126,8 +126,7 @@ function updateUserandPass(index){
 
 
 
-//CHECK FILE HERE TO GET SERVERS
-//blah blah blah
+//CHECK FILE HERE TO GET SERVER INFO FOR THE VERY FIRST TIME WE RUN.
 
 var i;
 myservers = new Array();
@@ -194,10 +193,10 @@ function connectToServer() {
 	/////PUT SOME CODE TO CONNECT TO ACTUALLY CONNECT TO SERVER
 	// VARS we care about :
 	
-		console.log("TEST TEST SERVER NUM:"+currentservernum);	
-		console.log("TEST TEST SERVER URL:"+myservers[currentservernum].url);	
-		console.log("TEST TEST USER:"+myservers[currentservernum].username);	
-		console.log("TEST TEST PASS:"+myservers[currentservernum].password);	
+//		console.log("TEST TEST SERVER NUM:"+currentservernum);	
+//		console.log("TEST TEST SERVER URL:"+myservers[currentservernum].url);	
+//		console.log("TEST TEST USER:"+myservers[currentservernum].username);	
+//		console.log("TEST TEST PASS:"+myservers[currentservernum].password);	
 	
 		var serverBaseUrl = "https://"+myservers[currentservernum].url;
 		var serverUrl = serverBaseUrl+"/login/index/embeddedlogin";
