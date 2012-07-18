@@ -14,4 +14,5 @@ mv blackberry ../../lib/dijit/themes/.
 cd ..
 rm -rf temp_files
 
+mv ../lib/dojox/mobile/themes/iphone ../lib/dojox/mobile/themes/iphone.bad
 
