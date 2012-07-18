@@ -484,16 +484,15 @@ function deleteserver(a){
 	function saveserver()
 		{
 			
-		//Write this to file ....
-		//xxxxxxxx
-		
-
 		//Add to myservers
 		myservers[clickedservernum].url=document.getElementById("editservername").value	
 		myservers[clickedservernum].city=document.getElementById("editcity").value
 		myservers[clickedservernum].username=document.getElementById("editusername").value
 		myservers[clickedservernum].password=document.getElementById("editpassword").value
 		
+		//Write this to file ....
+		saveToLocalStorage();
+
 		//Change in edit servers
 		dijit.byId('servernum' + clickedservernum).set("label",myservers[clickedservernum].url);
 		
