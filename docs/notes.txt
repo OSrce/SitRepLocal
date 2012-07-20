@@ -1,0 +1,9 @@
+For android need to make sure we add flag for aapt :
+
+/Developer/android-sdk-macosx/platform-tools/aapt package -v -S /Users/jreifer/Documents/workspace/SitRep/bin/res -S /Users/jreifer/Documents/workspace/SitRep/res -f --no-crunch --auto-add-overlay --debug-mode -M /Users/jreifer/Documents/workspace/SitRep/bin/AndroidManifest.xml -A /Users/jreifer/Documents/workspace/SitRep/assets -I /Developer/android-sdk-macosx/platforms/android-15/android.jar -F /Users/jreifer/Documents/workspace/SitRep/bin/resources.ap_  --ignore-assets "ignore_nothing"
+
+
+
+
+
+
