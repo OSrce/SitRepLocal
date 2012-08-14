@@ -6,50 +6,28 @@
 
 
 <title>SitRep1.0</title>
-<script type="text/javascript" src="lib/dojo/dojo.js" data-dojo-config="'async':true,'parseOnLoad':true,'packages':[{'name':'maqetta','location':'../../maqetta'},{'name':'gridx','location':'../gridx'},{'name':'clipart','location':'../../clipart'},{'name':'shapes','location':'../../shapes'},{'name':'jquery-ui','location':'../../jquery-ui'},{'name':'yui','location':'../../yui'}]"></script>
+<script type="text/javascript" src="lib/dojo/dojo.js" data-dojo-config="'async':true,'parseOnLoad':true"></script>
+
 <script type="text/javascript">
-require([
-  "dijit/dijit",
-  "dojo/parser",
-  "dijit/TitlePane",
-  "dijit/Toolbar",
-  "dijit/form/Button",
-  "dojox/form/CheckedMultiSelect",
-  "dojox/io/xhrScriptPlugin",
-  "dojo/data/ItemFileReadStore",
-  "dojox/data/CsvStore",
-  "dijit/MenuBar",
-  "dijit/PopupMenuBarItem",
-  "dijit/MenuItem",
-  "dijit/Menu",
-  "dijit/form/SimpleTextarea",
-  "dijit/form/TextBox",
-  "dijit/form/CheckBox",
-  "dijit/layout/TabContainer",
-  "dijit/layout/ContentPane",
-   "dojox/mobile/RoundRectCategory",
-   "dojox/mobile/RoundRectDataList",
-   "dojox/mobile",
-   "dojox/mobile/TabBar",
-   "dijit/Dialog",
-    "dojox/widget/Standby"
-]);
+require( {
+	baseUrl: 'lib',
+	packages: [
+		'dojo',
+		'dijit',
+		'dojox',
+		'srd'
+	],
+}, [ 'srd/login_desktop']);
 
-//This makes it work for dojo.XXX calls, but I don't know why
-//Dojo 1.7 (AMD)
-require(["dojo"], function(dojo){
+require(['srd/login_desktop'], function(login_desktop) {
 
-dojo.require("dijit.form.MultiSelect");
+srdLogin = new login_desktop();
 
-
-});
-
-////////NOTES:
-
-
-
+} );
 
 </script>
+
+
 
 <style>
 	@import "lib/dijit/themes/claro/claro.css";@import "app.css";
@@ -60,6 +38,7 @@ dojo.require("dijit.form.MultiSelect");
 
 </head>
 <body class="claro" dvFlowLayout="true" data-davinci-ws="collapse" id="myapp">
+
 <span data-dojo-type="dijit.layout.TabContainer" style="width: 100%; height: 100%; min-width:300px; min-height:300px;" controllerWidget="dijit.layout.TabController">
 <div data-dojo-type="dijit.layout.ContentPane" id="root_view" title="Login" extractContent="false" preventCache="false" preload="false" refreshOnShow="false" selected="selected" closable="false" doLayout="false">
 
@@ -84,7 +63,7 @@ dojo.require("dijit.form.MultiSelect");
   <fieldset style="border: 5px groove threedface; margin: 2px; padding: 0.75em;">
   <legend>
       Login</legend>
-<form action="javascript:connectToServer()" method="get">
+<form action="javascript:srdLogin.connectToServer()" method="get">
     <table style="width: 100;">
    <tbody>
        <tr>
@@ -92,158 +71,9 @@ dojo.require("dijit.form.MultiSelect");
            <label id="selectserver" style="width: 20%;">
              Select server:</label>
          </td>
-         <td>
+         <td id=serverListLocation1>
+
  
- 
- 
- <script type="text/javascript">
-
-		function saveToLocalStorage() {
-			localStorage.myservers_count = myservers.length;
-			for(var i in myservers) {
-				localStorage["myservers_"+i]= dojo.toJson(myservers[i]);
-				console.log("LocalStorage : myservers_"+i+" VALUE="+dojo.toJson(myservers[i]) );
-			}
-			return;
-		}
-
-	dojo.addOnUnload(saveToLocalStorage);
-
-///////////////////////////////updateUserandPass()
-function updateUserandPass(index){
-
-		if(index<0){
-	   		document.getElementById("userbox").value="";
-			document.getElementById("passbox").value="";			
-		
-			return;
-		}
-		//var lis = document.getElementById("selectbox").getElementsByTagName("li");
-		currentservernum=index;
-	   	document.getElementById("userbox").value=myservers[index].username;
-		document.getElementById("passbox").value=myservers[index].password;	
-}
-
-
-
-//CHECK FILE HERE TO GET SERVER INFO FOR THE VERY FIRST TIME WE RUN.
-
-var i;
-myservers = new Array();
-
-//myservers = [
-//{ "url":"nyc.sitrep.org", "city":"New York", "username":"Jon","password":"heybaby" },
-//{"url":"lax.sitrep.org", "city":"Los Angeles", "username":"Alex","password":"secret" },
-//{"url":"chi.sitrep.org", "city":"Chicago", "username":"Joey","password":"fudge" }
-//] 
-
-var myservers_count = 0;
-
-if ( localStorage.myservers_count != null) {
-	myservers_count = localStorage.myservers_count;
-	for(var i=0;i<myservers_count; i++) {
-		if(localStorage["myservers_"+i] != null) {
-			myservers[i] = dojo.fromJson( localStorage["myservers_"+i] );
-			console.log("TEST5="+localStorage["myservers_"+i]);
-		}
-	}
-}
-
-
-var serversfound=myservers.length;
-
-//serversfound=0;
-//Change what's shown based on the number of servers found
-if(serversfound==0) {
-
-	myservers = [{ "url":"demo.sitrep.org", "city":"New York", "username":"SitRepDemo","password":"SRDemo115" }]
-	serversfound=1;
-	//document.write('<input type="text" data-dojo-type="dijit.form.TextBox" value="demo.sitrep.org"><' + '/input>');
-	//document.getElementById("selectserver").innerHTML="Server:";
-	
-
-}
-
-
-		document.write('<select id="selectbox" onchange="updateUserandPass(this.selectedIndex)">');
-		for ( i=0;i<myservers.length;i++)
-	{
-		document.write('<option>' + myservers[i].url + '<'+ '/option>');
-	}
-	document.write("<" + "/select>");
-		
-		document.getElementById("selectserver").innerHTML="Select server:";
-
-dojo.ready(function(){updateUserandPass(document.getElementById("selectbox").selectedIndex);});
-
-
-
-/////////////////////connectToServer()
-function connectToServer() { 
-
-		document.getElementById("loginfeedback").innerHTML="";
-    var standby = new dojox.widget.Standby({ 
-        target: "root_view" 
-    }); 
-    document.body.appendChild(standby.domNode); 
-    standby.startup(); 
-
-	standby.show(); 
-
-	/////PUT SOME CODE TO CONNECT TO ACTUALLY CONNECT TO SERVER
-	// VARS we care about :
-	
-//		console.log("TEST TEST SERVER NUM:"+currentservernum);	
-//		console.log("TEST TEST SERVER URL:"+myservers[currentservernum].url);	
-//		console.log("TEST TEST USER:"+myservers[currentservernum].username);	
-//		console.log("TEST TEST PASS:"+myservers[currentservernum].password);	
-	
-		var serverBaseUrl = "https://"+myservers[currentservernum].url;
-		var serverUrl = serverBaseUrl+"/login/index/embeddedlogin";
-		var theData = { "username": myservers[currentservernum].username, "password":myservers[currentservernum].password };
-
-		var xhrArgs = {
-		url: serverUrl,
-		timeout: 4000,
-		postData: dojo.toJson(theData),
-		handleAs: 'json',
-		headers: { 'Content-Type' : 'application/json' },
-		load: function(data) {
-			console.log("Finished auth request");
-
-			standby.hide(); 
-			if(data != null && data.authenticated != null && data.authorized != null) {
-				if(data.authenticated == true && data.authorized == true) {
-					console.log("auth="+data.authenticated);
-					console.log("author="+data.authorized);
-					// USER HAS SUCCESFULLY AUTH REDIRCT TO THE HOME PAGE.
-					window.location.href = serverBaseUrl+"/home";
-
-				} else if(data.authenticated != true){
-						document.getElementById("loginfeedback").innerHTML="Invalid username or password!";
-				} else if(data.authorized != true){
-				
-						document.getElementById("loginfeedback").innerHTML="This user is not authorized to connect to this server!";
-					
-					}
-			} else {
-				document.getElementById("loginfeedback").innerHTML="Error: could not connect to server!";
-			}
-	
-		},
-		error: function(theError) {
-			console.log("An unexpected error occured! Error"+theError);
-			standby.hide(); 
-		
-		}
-		};
-		var deferred = dojo.xhrPost(xhrArgs);
-
-
-}
-
-
-	</script> 
 
          </td><td></td></tr>
        <tr><td>
@@ -275,13 +105,6 @@ function connectToServer() {
    </table>
    
    
-   <script>
-   	if(serversfound>0) {
-   		document.getElementById("userbox").value=myservers[0].username;
-		document.getElementById("passbox").value=myservers[0].password;
-   	}
-   </script>
-   
    </form>
     </fieldset>
     
@@ -301,7 +124,7 @@ function connectToServer() {
 				<div class="dijitDialogPaneActionBar">
 					<button dojoType="dijit.form.Button" type="button" onClick="myDialog.onCancel();"
 							id="cancel">Cancel</button>
-					<button dojoType="dijit.form.Button" type="submit" id="ok" onClick="deleteserver(document.getElementById('serverlist').selectedIndex);">OK</button>
+					<button dojoType="dijit.form.Button" type="submit" id="ok" onClick=srdLogin.deleteserver();>OK</button>
 				
 				</div>
 			</div>
@@ -310,200 +133,16 @@ function connectToServer() {
 <!--
 	<select dojotype="dijit.form.MultiSelect" size="5" id="serverselectbox" ></select>
 	-->
-	 <script type="text/javascript">
-	 //multiple="false"
-	 
-	 
-	 
-	 var currentservernum=0; //currentservernum is the server that is selected in the select box on the login page
-	 var clickedservernum=0; //the server that is clicked in the edit menu
-	 var deletepressed=0; //indicates if the delete button has been clicked
 
-//////////////////////////////////clickServer() 
-	 function clickserver(a)
-		{
-			
-			
-			if(a<0){
-					document.getElementById("editservername").value="";
-					document.getElementById("editusername").value="";
-					document.getElementById("editpassword").value="";
-					document.getElementById("editcity").value="";
-					return;
-			}
-		document.getElementById("confirmtext").innerHTML= "server " + a + " is ";
-		document.getElementById("editservername").value=myservers[a].url;
-		document.getElementById("editusername").value=myservers[a].username;
-		document.getElementById("editpassword").value=myservers[a].password;
-		document.getElementById("editcity").value=myservers[a].city;
-		
-		 
-		// currentservernum=a;
-		clickedservernum=a;
-		deactivatesave();
-		//var w = dijit.byId('server_view');
-		//w.performTransition('server_data_view',1,"slide",null);	
-			
-		}//End of clickserver
+
+		<table><tr><td id=serverListLocation2> </td></tr>
 	
-
-////////////////////////////////////addToSelectBox()
-function addToSelectBox(a){
-	//Add to select box on root_view
-		var select = document.getElementById("selectbox");
-		var opt = document.createElement("option");
-    	opt.innerText = myservers[a].url;
-    	select.appendChild(opt);	
-}
-
-
-//////////////////////////////////addServer()
-	function addServer(num){
-	//this gets called twice if you use "onclick=" instead of data-dojo-props="onClick:function(){...}"
-		//if(deletepressed==1){deleteserverprep();}
-
-		myservers.push({ "url":"edit.sitrep.org", "city":"Anytown", "username":"","password":""});
-		var thisservernum=myservers.length - 1;
-
-		
-		var opt = document.createElement("option");
-    	opt.innerHTML = myservers[thisservernum].url;
-    	document.getElementById("serverlist").appendChild(opt);
-    	document.getElementById("serverlist").selectedIndex=thisservernum;
-
-		//and this    			onclick: "clickserver(" + thisservernum + ")",
-		addToSelectBox(thisservernum);
-		
-		clickserver(thisservernum);
-		saveserver();
-}
-
-
-
-
-///////////////////////////
-function deleteserverprep(){
-
-	document.getElementById("confirmtext").innerHTML="Are you sure you want to delete " + myservers[document.getElementById("serverlist").selectedIndex].url + "?";
-	
-	//document.getElementById("ok").focus();
-	myDialog.show();
-	
-	return;
-}
-
-function deleteserver(a){
-
-
-	//deleteserverprep();
-	//remove from myservers
-	//myDialog.hide();
-
-	
-	//Take items out of array
-	myservers.splice(a,1);
-
-	
-	//remake Server List
-	//makeserverlist();
-	document.getElementById("serverlist").options.length = myservers.length;
-	for ( i=0;i<myservers.length;i++)
-	{
-		document.getElementById("serverlist").options[i].innerHTML=myservers[i].url;
-	}
-	
-	//remove from login page
-	//
-	//$("#selectBox option[value='option1']").removeChild();
-	//select = document.getElementById("selectbox");
-	//remove from 
-
-	document.getElementById("selectbox").options.length = myservers.length;
-	for ( i=0;i<myservers.length;i++)
-	{
-		document.getElementById("selectbox").options[i].innerHTML=myservers[i].url;
-	}
-	
-	if(document.getElementById("serverlist").selectedIndex==-1){
-		document.getElementById("serverlist").selectedIndex=myservers.length-1;
-		document.getElementById("selectbox").selectedIndex=myservers.length-1;
-	}
-	currentservernum=document.getElementById("selectbox").selectedIndex;
-	updateUserandPass(document.getElementById("selectbox").selectedIndex);
-	clickserver(document.getElementById("serverlist").selectedIndex);
-		
-}
-
-
-///////////////////////////////////////////saveserver()	
-	function saveserver()
-		{
-			
-		//Add to myservers
-		myservers[clickedservernum].url=document.getElementById("editservername").value	
-		myservers[clickedservernum].city=document.getElementById("editcity").value
-		myservers[clickedservernum].username=document.getElementById("editusername").value
-		myservers[clickedservernum].password=document.getElementById("editpassword").value
-
-		//Write this to localStorage....
-		saveToLocalStorage();
-
-		//Change in edit servers
-		//dijit.byId('servernum' + clickedservernum).set("label",myservers[clickedservernum].url);
-		document.getElementById("serverlist").options[clickedservernum].innerHTML=myservers[clickedservernum].url;
-		//document.getElementById("serverlist").options[document.getElementById("selectbox").selectedIndex].innerHTML=myservers[document.getElementById("selectbox").selectedIndex].url;
-		
-		
-		//Change on login page
-		document.getElementById("selectbox").options[clickedservernum].innerHTML=myservers[clickedservernum].url;
-		updateUserandPass(document.getElementById("selectbox").selectedIndex);
-	
-		deactivatesave();
-		}//End of saveserver
-	 
-	
-		
-		function makeserverlist(){
-
-				for ( i=0;i<myservers.length;i++)
-			{
-					document.write('<option>' + myservers[i].url + '<'+ '/option>');
-			}
-
-    	}
-	 
-	 	function activatesave(){
-	 		document.getElementById("savetext").innerHTML="  Click Save to save changes.";
-	 		dijit.byId("savebutton").setAttribute("disabled",false);
-	 		//	"Updated " + new Date());
-				
-	 	}
-	 
-		function deactivatesave(){
-	 		dijit.byId("savebutton").setAttribute("disabled",true);	
-	 		document.getElementById("savetext").innerHTML="";
-	 	} 
-	 	
-	 //Make all the server buttons
-		//document.write('<ul id="serverlist" data-dojo-type="dojox.mobile.RoundRectList">');
-		
-		document.write('<table><tr><td>');
-		document.write('<select id="serverlist" size=10 width=40 onchange="clickserver(this.selectedIndex)">');
-		//dojo.ready( function(){ makeserverlist(); });
-		//dojo.ready(function(){document.getElementById("serverlist").selectedIndex=0;});
-		makeserverlist();	
-		dojo.ready(function(){clickserver(0); document.getElementById("serverlist").selectedIndex=0;});	
-		document.write("<" + "/select>");
-		document.write("<" + "/td><" + "/tr>");
-
-	
-	</script>
 	
 		<tr><td>
- 		 <button label="Add Server" id="addbutton" data-dojo-type="dijit.form.Button" data-dojo-props="onClick:function(){addServer(document.getElementById('serverlist').selectedIndex);}"></button>
+ 		 <button label="Add Server" id="addbutton" data-dojo-type="dijit.form.Button" data-dojo-props="onClick:function(){srdLogin.addServer(document.getElementById('selectbox2').selectedIndex);}"></button>
  		<!-- <button label="Delete Server"  class="deleteButtonNode" style="background-color:red" id="deletebutton" data-dojo-type="dijit.form.Button" data-dojo-props="onClick:function(){deleteserver(document.getElementById("serverlist").selectedIndex);}"></button>
 		 -->
-		 <button label="Delete Server"  class="deleteButtonNode" style="background-color:#F27F7F" id="deletebutton" data-dojo-type="dijit.form.Button" data-dojo-props="onClick:function(){deleteserverprep();}"></button>
+		 <button label="Delete Server"  class="deleteButtonNode" style="background-color:#F27F7F" id="deletebutton" data-dojo-type="dijit.form.Button" data-dojo-props="onClick:function(){srdLogin.deleteserverprep();}"></button>
 	
 
 		 </td></tr>
@@ -523,22 +162,22 @@ function deleteserver(a){
          <td>
            <label style="width: 20%;">
               Server:</label>
-         </td><td><input type="text" id="editservername" data-dojo-type="dijit.form.TextBox" data-dojo-props="onChange:function(){activatesave();}" intermediateChanges=true></input>
+         </td><td><input type="text" id="editservername" data-dojo-type="dijit.form.TextBox" data-dojo-props="onChange:function(){srdLogin.activatesave();}" intermediateChanges=true></input>
 	</td><td></td></tr>
 	<tr>
          <td><label>
-            City:</label></td><td><input type="text" id="editcity" data-dojo-type="dijit.form.TextBox" data-dojo-props="onChange:function(){activatesave();}" intermediateChanges=true></input>
+            City:</label></td><td><input type="text" id="editcity" data-dojo-type="dijit.form.TextBox" data-dojo-props="onChange:function(){srdLogin.activatesave();}" intermediateChanges=true></input>
         </td><td></td></tr>
        <tr>
          <td><label>
-            Username:</label></td><td><input type="text" id="editusername" data-dojo-type="dijit.form.TextBox" data-dojo-props="onChange:function(){activatesave();}" intermediateChanges=true></input>
+            Username:</label></td><td><input type="text" id="editusername" data-dojo-type="dijit.form.TextBox" data-dojo-props="onChange:function(){srdLogin.activatesave();}" intermediateChanges=true></input>
         </td><td></td></tr>
        <tr>
-         <td><label>Password:</label></td><td><input type="text" id="editpassword" data-dojo-type="dijit.form.TextBox" data-dojo-props="onChange:function(){activatesave();}" intermediateChanges=true></input>
+         <td><label>Password:</label></td><td><input type="text" id="editpassword" data-dojo-type="dijit.form.TextBox" data-dojo-props="onChange:function(){srdLogin.activatesave();}" intermediateChanges=true></input>
         </td><td>
         </td></tr>
        <tr> <td></td><td>
-  				<button  data-dojo-type="dijit.form.Button" id="savebutton" disabled="disabled" data-dojo-props="onClick:function(){saveserver();}">Save</button>
+  				<button  data-dojo-type="dijit.form.Button" id="savebutton" disabled="disabled" data-dojo-props="onClick:function(){srdLogin.saveserver();}">Save</button>
         		<span id="savetext"></span>
         	</td><td></td> </tr>
      </tbody>
