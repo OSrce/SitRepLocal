@@ -7,19 +7,11 @@
 <script type="text/javascript" src="lib/dojo/dojo.js" data-dojo-config="'async':true,'parseOnLoad':true"></script>
 
 <script type="text/javascript">
-require( {
-	baseUrl: 'lib',
-	packages: [
-		'dojo',
-		'dijit',
-		'dojox',
-		'srd'
-	],
-}, [ 'srd/login_desktop']);
 
-require(['srd/login_desktop'], function(login_desktop) {
+require(['srd/Login_mobile'], function(Login) {
 
-srdLogin = new login_desktop();
+srdLocalType = "mobile";
+srdLogin = new Login();
 
 } );
 
@@ -70,7 +62,7 @@ srdLogin = new login_desktop();
         </td>
          <td>
 <input type="text" id="userbox" data-dojo-type="dojox.mobile.TextBox"></input>
-        </td><td></td></tr>
+        </td><td><div id="loginfeedback" style="color: red"></div>  </td></tr>
        <tr>
 <td>
 <label>
@@ -123,18 +115,18 @@ srdLogin = new login_desktop();
   <!--##################################### server_view ###################################-->
  <div data-dojo-type="dojox.mobile.ScrollableView" id="server_view" style="height: 100%; display: none;">
 <h1 label="Edit Servers" data-dojo-type="dojox.mobile.Heading" back="Home" moveTo="root_view">
-<div data-dojo-type="dojox.mobile.ToolBarButton" class="mblDomButtonWhitePlus" data-dojo-props="onClick: function(){addServer(serversfound);}" style="float:right;"></div>
+<div data-dojo-type="dojox.mobile.ToolBarButton" class="mblDomButtonWhitePlus" data-dojo-props="onClick: function(){srdLogin.addServer();}" style="float:right;"></div>
 
 </h1>
 <div id="serverviewhtml"></div>
 
 
-	    		<ul id="serverlist" data-dojo-type="dojox.mobile.RoundRectList">
+	    		<ul id="serverListLocation2">
 	    		</ul>
 
 
 	<ul data-dojo-type="dojox.mobile.TabBar" data-dojo-props='barType:"segmentedControl"' fixed="bottom" >
- 		 <li label="Delete" id="deletebutton" data-dojo-type="dojox.mobile.TabBarButton" data-dojo-props="onClick:function(){deleteserverprep();}"></li>
+ 		 <li label="Delete" id="deletebutton" data-dojo-type="dojox.mobile.TabBarButton" data-dojo-props="onClick:function(){srdLogin.deleteserverprep();}"></li>
 	</ul>
  
 
@@ -177,7 +169,7 @@ srdLogin = new login_desktop();
         </td><td>
         </td></tr>
        <tr> <td></td><td>
-  				<button data-dojo-type="dojox.mobile.Button" id="savebutton" data-dojo-props="onClick:function(){saveserver();}">Save</button>
+  				<button data-dojo-type="dojox.mobile.Button" id="savebutton" data-dojo-props="onClick:function(){srdLogin.saveserver();}">Save</button>
            
         </td><td></td> </tr>
      </tbody>
