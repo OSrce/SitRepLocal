@@ -29,6 +29,10 @@
  *
  * [1] http://www.w3.org/TR/CSS21/cascade.html#cascade
  */
+@import "../../dojox/mobile/themes/iphone/iphone.css";
+@import "../../dojox/mobile/themes/iphone/iphone-compat.css";
+
+
 html,body {
 	height: 100%;
 	width: 100%;

@@ -9,17 +9,9 @@
 <script type="text/javascript" src="lib/dojo/dojo.js" data-dojo-config="'async':true,'parseOnLoad':true"></script>
 
 <script type="text/javascript">
-require( {
-	baseUrl: 'lib',
-	packages: [
-		'dojo',
-		'dijit',
-		'dojox',
-		'srd'
-	],
-}, [ 'srd/login_desktop']);
 
-require(['srd/login_desktop'], function(login_desktop) {
+
+require(['srd/Login'], function(login_desktop) {
 
 srdLogin = new login_desktop();
 
@@ -139,7 +131,7 @@ srdLogin = new login_desktop();
 	
 	
 		<tr><td>
- 		 <button label="Add Server" id="addbutton" data-dojo-type="dijit.form.Button" data-dojo-props="onClick:function(){srdLogin.addServer(document.getElementById('selectbox2').selectedIndex);}"></button>
+ 		 <button label="Add Server" id="addbutton" data-dojo-type="dijit.form.Button" data-dojo-props="onClick:function(){srdLogin.addNewServer(document.getElementById('selectbox2').selectedIndex);}"></button>
  		<!-- <button label="Delete Server"  class="deleteButtonNode" style="background-color:red" id="deletebutton" data-dojo-type="dijit.form.Button" data-dojo-props="onClick:function(){deleteserver(document.getElementById("serverlist").selectedIndex);}"></button>
 		 -->
 		 <button label="Delete Server"  class="deleteButtonNode" style="background-color:#F27F7F" id="deletebutton" data-dojo-type="dijit.form.Button" data-dojo-props="onClick:function(){srdLogin.deleteserverprep();}"></button>
