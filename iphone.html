@@ -4,6 +4,10 @@
 <meta charset="utf-8"/>
 <title>SitRep1.0</title>
 
+<style>
+@import "app.css";
+</style>
+
 <script type="text/javascript" src="lib/dojo/dojo.js" data-dojo-config="'async':true,'parseOnLoad':true"></script>
 
 <script type="text/javascript">
@@ -16,10 +20,6 @@ srdLogin = new Login();
 } );
 
 </script>
-
-<style>
-@import "lib/dijit/themes/iphone/iphone.css";@import "app.css";
-</style>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"></meta>
 </head>
@@ -115,7 +115,7 @@ srdLogin = new Login();
   <!--##################################### server_view ###################################-->
  <div data-dojo-type="dojox.mobile.ScrollableView" id="server_view" style="height: 100%; display: none;">
 <h1 label="Edit Servers" data-dojo-type="dojox.mobile.Heading" back="Home" moveTo="root_view">
-<div data-dojo-type="dojox.mobile.ToolBarButton" class="mblDomButtonWhitePlus" data-dojo-props="onClick: function(){srdLogin.addServer();}" style="float:right;"></div>
+<div data-dojo-type="dojox.mobile.ToolBarButton" data-dojo-props="icon:'mblDomButtonWhitePlus', onClick: function(){srdLogin.addNewServer();}" style="float:right;"></div>
 
 </h1>
 <div id="serverviewhtml"></div>
