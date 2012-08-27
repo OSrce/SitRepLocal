@@ -5,16 +5,33 @@
 <title>SitRep1.0</title>
 
 <style>
-@import "/lib/srd/css/iphone.css";
+@import "lib/srd/css/iphone.css";
 </style>
 
-<script type="text/javascript" src="/lib/srd/login_bootloader_iphone.js" data-dojo-config="'async':true,'parseOnLoad':true"></script>
+<script>
+dojoConfig = {
+  baseUrl: 'lib',
+	tlmSiblingOfDojo: true,
+	async: true,
+	parseOnLoad: false,
+  packages: [
+    'dojo',
+    'dijit',
+    'dojox',
+    'srd'
+  ]
+};
+
+</script>
+
+
+<script type="text/javascript" src="lib/dojo/dojo.js" ></script>
+
 
 <script type="text/javascript">
 
-require(['srd/Login_mobile'], function(Login) {
+require(['srd/Login_mobile', 'dojo/domReady!'], function(Login) {
 
-srdLocalType = "mobile";
 srdLogin = new Login();
 
 } );
