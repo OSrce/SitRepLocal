@@ -30,6 +30,9 @@
  * [1] http://www.w3.org/TR/CSS21/cascade.html#cascade
  */
 
+
+@import "../../dijit/themes/claro/form/Select.css";
+
 @import "../../dojox/mobile/themes/iphone/iphone-compat.css";
 
 @import "../../dojox/mobile/themes/iphone/iphone.css";
@@ -38,5 +41,39 @@ html,body {
 	height: 100%;
 	width: 100%;
 }
+
+.dijitSelect {
+    background-color: #FFFFFF;
+    border: 1px solid #B5BCC7;
+    border-collapse: separate;
+}
+table.dijitInline {
+    -moz-box-sizing: content-box;
+    display: inline-table;
+}
+.dijitSelect {
+    border-collapse: collapse;
+    margin: 0.2em;
+}
+.dijitLeft {
+    background-position: left top;
+    background-repeat: no-repeat;
+}
+.dijitInline {
+    border: 0 none;
+    display: inline-block;
+    padding: 0;
+    vertical-align: middle;
+}
+.dijitReset {
+    border: 0 none;
+    color: inherit;
+    font: ;
+    margin: 0;
+    padding: 0;
+}
+
+
+
 
  

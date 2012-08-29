@@ -6,6 +6,7 @@ define( [
 	"dojo/parser",
 	"dojo/_base/connect",
 	"srd/Login",
+	"dojox/mobile/Heading",
 	"dojo/domReady!"
 ], function(declare, dojo, dojox, parser, connect, Login) {
 	return declare( [ Login ], {
@@ -29,13 +30,18 @@ define( [
 			}
 			
 			var srdLogin = this;
-			this.theSelect = dojo.create("select", { id:"selectbox" ,onchange:function(e) { this.selectserver(this.theSelect.selectedIndex) }.bind(this)  } , dojo.byId("serverListLocation1")  );
+			this.optionArr = Array();
+
+//			this.theSelect = dojo.create("select",  { size:1, style:"border: solid 1px #999999", id:"selectbox", options:this.optionArr ,onchange:function(e) { this.selectserver(this.theSelect.selectedIndex) }.bind(this)  }, dojo.byId("serverListLocation1")  );
+			this.theSelect = dojo.create("select",  { id:"selectbox", srdLogin: this, onchange:function(e) { srdLogin.selectserver(this.options.selectedIndex) }   }, dojo.byId("serverListLocation1")  );
+		
 			
 			this.theSelect2 = new dojox.mobile.RoundRectList( {editable: 'true' }); 
 			this.theSelect2.placeAt(dojo.byId("serverListLocation2") );	
 			for ( i=0;i<this.myservers.length;i++)
 			{
 				dojo.create("option", { innerHTML:this.myservers[i].url }, this.theSelect);
+//				this.optionArr.push( { label:this.myservers[i].url } );
 				var theListItem = new dojox.mobile.ListItem( {
 					label: this.myservers[i].url,
 					"class": "mbListItem",
@@ -57,14 +63,20 @@ define( [
 				});
 				this.theSelect2.addChild(theListItem);
 			}
-			this.theSelect2.startup();
+//			this.theSelect = new Select(); // { id:"selectbox", options:this.optionArr ,onchange:function(e) { this.selectserver(this.theSelect.selectedIndex) }.bind(this)  });
+//			this.theSelect.placeAt(dojo.byId("serverListLocation1")  );
+//			this.theSelect.startup();
+	
+
+		this.theSelect2.startup();
+
 		},
 		//END uiSetup
 		//BEGIN selectserver
 		selectserver: function(index)
 		{
 			console.log("Select Server Called: "+index);	
-			document.getElementById("loginfeedback").innerHTML="";
+			dojo.setAttr(dojo.byId("loginfeedback"),"innerHTML","");
 			this.currentservernum=index;
 			if(! (index >= 0) ){
 	   		dojo.setAttr(dojo.byId("userbox"),"value","");
@@ -92,9 +104,8 @@ define( [
 		
 		var thisservernum = this.currentservernum;
 	
-		var opt = document.createElement("option");
-   	opt.innerHTML = this.myservers[thisservernum].url;
-   	dojo.byId("selectbox").appendChild(opt);
+		var opt = dojo.create("option", { "innerHTML":this.myservers[thisservernum].url}, this.theSelect  );
+//   	dojo.byId("selectbox").appendChild(opt);
    	dojo.byId("selectbox").selectedIndex=thisservernum;
 
 		var theListItem = new dojox.mobile.ListItem( {
@@ -176,10 +187,10 @@ define( [
 		{
 			
 		//Add to myservers
-		this.myservers[this.currentservernum].url=document.getElementById("editservername").value	
-		this.myservers[this.currentservernum].city=document.getElementById("editcity").value
-		this.myservers[this.currentservernum].username=document.getElementById("editusername").value
-		this.myservers[this.currentservernum].password=document.getElementById("editpassword").value
+		this.myservers[this.currentservernum].url=dojo.byId("editservername").value	
+		this.myservers[this.currentservernum].city=dojo.byId("editcity").value
+		this.myservers[this.currentservernum].username=dojo.byId("editusername").value
+		this.myservers[this.currentservernum].password=dojo.byId("editpassword").value
 
 		//Write this to localStorage....
 		this.saveToLocalStorage();

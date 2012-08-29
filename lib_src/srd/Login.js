@@ -24,8 +24,8 @@ define( [
   "dijit/form/CheckBox",
   "dijit/layout/TabContainer",
   "dijit/layout/ContentPane",
-  "dojox/mobile/deviceTheme",
-  "dojox/mobile/compat",
+//  "dojox/mobile/deviceTheme",
+//  "dojox/mobile/compat",
   "dojo/hash",
   "dojox/io/xhrScriptPlugin",
   "dojo/data/ItemFileReadStore",
@@ -57,8 +57,8 @@ define( [
 			console.log("Login contructor called!");
 			//CHECK FILE HERE TO GET SERVER INFO FOR THE VERY FIRST TIME WE RUN.
 
-			if( !!localStorage["myservers"] ) {
-				this.myservers = dojo.fromJson( localStorage["myservers"] );
+			if( !! window.localStorage.getItem("myservers") ) {
+				this.myservers = dojo.fromJson( window.localStorage.getItem("myservers") );
 			} else {
 				this.myservers = new Array();
 			}
@@ -95,7 +95,7 @@ define( [
 		},
 		saveToLocalStorage: function() {
 			console.log("saveToLocalStorage CALLED!");
-			localStorage["myservers"] = dojo.toJson(this.myservers);
+			window.localStorage.setItem("myservers", dojo.toJson(this.myservers) );
 			return;
 		},
 		updateUserandPass: function(index) {
@@ -124,7 +124,7 @@ define( [
 			var username = dojo.getAttr(dojo.byId("userbox"),"value");
 			var password = dojo.getAttr(dojo.byId("passbox"),"value");
 
-			var serverBaseUrl = "https://"+this.myservers[this.currentservernum].url;
+			var serverBaseUrl = "http://"+this.myservers[this.currentservernum].url;
 			var serverUrl = serverBaseUrl+"/login/index/embeddedlogin";
 			var theData = { "username": username, "password": password };
 
@@ -144,9 +144,11 @@ define( [
 				if(data != null && data.authenticated != null && data.authorized != null) {
 					if(data.authenticated == true && data.authorized == true) {
 						console.log("auth="+data.authenticated);
-					console.log("author="+data.authorized);
+						console.log("author="+data.authorized);
+
 						// USER HAS SUCCESFULLY AUTH REDIRCT TO THE HOME PAGE.
-						window.location.href = serverBaseUrl+"/home";
+//						window.location.href = serverBaseUrl+"/home/index/localindex";
+						dojo.create( 'iframe', { "src": 'main_frame.html', "style":"border: 0; width: 100%; height: 100%" } , dojo.byId("body") );
 					} else if(data.authenticated != true){
 							document.getElementById("loginfeedback").innerHTML="Invalid username or password!";
 					} else if(data.authorized != true){			

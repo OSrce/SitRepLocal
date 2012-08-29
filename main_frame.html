@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<title>SitRep1.0</title>
+		<style>
+			@import "lib/srd/css/srd.css";
+			@import "lib/OpenLayers/theme/default/style.css";
+		</style>
+
+		<script>
+
+			serverBaseUrl = parent.serverBaseUrl;
+			serverBaseUrl = "http://nyc.sitrep.org";
+			dojoConfig = {
+				baseUrl: serverBaseUrl+'/lib',
+				tlmSiblingOfDojo: true,
+				async: true,
+				parseOnLoad: false,
+  			packages: [
+					'dojo',
+					'dijit',
+					'dojox',
+					'org',
+					'srd'
+				],
+				cache: {}
+			};
+
+		</script>
+		<script type="text/javascript" src="lib/OpenLayers/OpenLayers.js"></script>
+		<script type="text/javascript"  src="lib/srd/dojo_bootloader.js"></script>
+
+		<script>
+			require([
+				'dojo/request',
+				"srd/srd_document",
+				"dojo/domReady!"
+			], function( request, srd_document ) {
+				request.get(serverBaseUrl+"/home/index/userdata", {
+			    handleAs: "json"
+  			}).then(
+					function(data){
+						data.serverBaseUrl = serverBaseUrl;
+						console.log("Creating srd: data="+data);
+						srd = new srd_document( data );
+						console.log(" srd done being created, now calling init");
+						srd.srd_init();
+						console.log("srd init done!");
+					}, function(err){
+						// Handle the error condition
+						console.log("ERROR:" + err);
+					}, function(evt){
+						console.log("In Progress.");
+					}  );
+			} );
+
+		</script>
+	</head>
+ 	<body class="tundra" >
+		<div id="theSrdDoc" >
+			<div id="jsDisabled" >It appears you have javascript disabled.  Please enable and reload the page.
+			</div>
+		</div>
+	</body>
+</html>
+
+
+
+
