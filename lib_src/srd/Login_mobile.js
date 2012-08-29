@@ -202,8 +202,20 @@ define( [
 		
 		dijit.byId('list2_itemnum_' + this.currentservernum).set("label", this.myservers[this.currentservernum].url);
 
-		} //End of saveserver
+		}, //End of saveserver
 		
+		//BEGIN loadSitRepFrame
+		loadSitRepFrame: function() {
+			dojo.create("iframe", {
+		    "src": "main_frame.html",
+		    "style": "border: 0; width: 100%; height: 100%"
+			}, dojo.byId("main_frame_view") );  
+			var w = dijit.byId('root_view');
+			w.performTransition('main_frame_view',1,"fade",null);
+		}
+		//END loadSitRepFrame
+
+	
 	
 
 

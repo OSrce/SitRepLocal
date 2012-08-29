@@ -124,7 +124,7 @@ define( [
 			var username = dojo.getAttr(dojo.byId("userbox"),"value");
 			var password = dojo.getAttr(dojo.byId("passbox"),"value");
 
-			var serverBaseUrl = "http://"+this.myservers[this.currentservernum].url;
+			serverBaseUrl = "http://"+this.myservers[this.currentservernum].url;
 			var serverUrl = serverBaseUrl+"/login/index/embeddedlogin";
 			var theData = { "username": username, "password": password };
 
@@ -148,16 +148,20 @@ define( [
 
 						// USER HAS SUCCESFULLY AUTH REDIRCT TO THE HOME PAGE.
 //						window.location.href = serverBaseUrl+"/home/index/localindex";
-						dojo.create( 'iframe', { "src": 'main_frame.html', "style":"border: 0; width: 100%; height: 100%" } , dojo.byId("body") );
+						this.loadSitRepFrame();
+
+//						dojo.create( 'iframe', { "src": 'main_frame.html', "style":"border: 0; width: 100%; height: 100%" } , dojo.byId("body") );
 					} else if(data.authenticated != true){
+							standby.hide(); 
 							document.getElementById("loginfeedback").innerHTML="Invalid username or password!";
 					} else if(data.authorized != true){			
+							standby.hide(); 
 							document.getElementById("loginfeedback").innerHTML="This user is not authorized to connect to this server!";
 					}
 				} else {
 					document.getElementById("loginfeedback").innerHTML="Error: could not connect to server!";
 				}
-			}, function(theError) {
+			}.bind(this), function(theError) {
 				console.log("An unexpected error occured! Error"+theError);
 				standby.hide(); 	
 			}
@@ -166,6 +170,19 @@ define( [
 //			var deferred = xhr(serverUrl,xhrArgs);
 		},
 		//END connectToServer
+
+		//BEGIN loadSitRepFrame
+		loadSitRepFrame: function() {
+
+			dijit.byId("targetPane").set("content", dojo.create("iframe", {
+		    "src": "main_frame.html",
+		    "style": "border: 0; width: 100%; height: 100%"
+			}));  
+				
+//						dojo.create( 'iframe', { "src": 'main_frame.html', "style":"border: 0; width: 100%; height: 100%" } , dojo.byId("body") );
+
+		},
+		//END loadSitRepFrame
 
 		//BEGIN selectserver
 		selectserver: function(index)
