@@ -8,6 +8,7 @@ define( [
 	"dojo/ready",
 	"dojox",
 	"dojox/main",
+	"dojo/request",
 	"dojo/request/xhr",
   "dijit/dijit",
   "dojo/parser",

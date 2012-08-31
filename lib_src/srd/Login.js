@@ -4,7 +4,7 @@ define( [
 	"dojo/_base/declare",
 	"dojo",
 	"dojox",
-	"dojo/request/xhr",
+	"dojo/request",
   "dijit/dijit",
   "dojo/parser",
   "dojo/selector/acme",
@@ -50,7 +50,7 @@ define( [
   "dijit/Dialog",
   "dojox/widget/Standby",
   "dijit/form/MultiSelect"
-], function(declare, dojo, dojox, xhr) {
+], function(declare, dojo, dojox, request) {
 	return declare( [], {
 
 		constructor: function() {
@@ -114,58 +114,65 @@ define( [
 		//BEGIN connectToServer
 		connectToServer: function() {
 			document.getElementById("loginfeedback").innerHTML="";
-	    var standby = new dojox.widget.Standby({ 
+	    var standby = dojox.widget.Standby({ 
         target: "root_view" 
  		   }); 
 	    document.body.appendChild(standby.domNode); 
 	    standby.startup(); 
 			standby.show(); 
 
+			var srdLogin = this;
+
 			var username = dojo.getAttr(dojo.byId("userbox"),"value");
 			var password = dojo.getAttr(dojo.byId("passbox"),"value");
 
 			serverBaseUrl = "http://"+this.myservers[this.currentservernum].url;
 			var serverUrl = serverBaseUrl+"/login/index/embeddedlogin";
-			var theData = { "username": username, "password": password };
+			var theData = dojo.toJson( { "username": username, "password": password } );
+//			var theData = { "username": username, "password": password };
 
 			console.log("Username :"+username+" , password:"+password);
 
 			var xhrArgs = {
 //				url: serverUrl,
 				timeout: 4000,
-				method: 'POST',
-				data: dojo.toJson(theData),
+//				method: 'POST',
 				handleAs: 'json',
-				headers: { 'Content-Type' : 'application/json' }
+				data: theData
+//				headers: { 'Content-Type' : 'application/json' }
 			};
-			xhr(serverUrl, xhrArgs).then(function(data) {
+			console.log("Sending Auth Request");
+//			window.location.href = serverBaseUrl;
+			request.post(serverUrl, xhrArgs).then(function(data) {
 				console.log("Finished auth request");
 				standby.hide(); 
 				if(data != null && data.authenticated != null && data.authorized != null) {
+					console.log("auth="+data.authenticated);
+					console.log("author="+data.authorized);
 					if(data.authenticated == true && data.authorized == true) {
-						console.log("auth="+data.authenticated);
-						console.log("author="+data.authorized);
 
+						console.log("Successfully Authenticated & autorized!");
 						// USER HAS SUCCESFULLY AUTH REDIRCT TO THE HOME PAGE.
 //						window.location.href = serverBaseUrl+"/home/index/localindex";
-						this.loadSitRepFrame();
+//						window.location.href = serverBaseUrl;
+							srdLogin.loadSitRepFrame();
 
 //						dojo.create( 'iframe', { "src": 'main_frame.html', "style":"border: 0; width: 100%; height: 100%" } , dojo.byId("body") );
 					} else if(data.authenticated != true){
-							standby.hide(); 
 							document.getElementById("loginfeedback").innerHTML="Invalid username or password!";
 					} else if(data.authorized != true){			
-							standby.hide(); 
 							document.getElementById("loginfeedback").innerHTML="This user is not authorized to connect to this server!";
 					}
 				} else {
 					document.getElementById("loginfeedback").innerHTML="Error: could not connect to server!";
 				}
-			}.bind(this), function(theError) {
-				console.log("An unexpected error occured! Error"+theError);
+			}, function(theError) {
 				standby.hide(); 	
+				document.getElementById("loginfeedback").innerHTML="Error: An unknown error occured:"+theError;
+				console.log("An unexpected error occured! Error"+theError);
 			}
 		);
+
 //			var deferred = dojo.xhrPost(xhrArgs);
 //			var deferred = xhr(serverUrl,xhrArgs);
 		},

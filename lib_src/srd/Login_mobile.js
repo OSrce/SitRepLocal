@@ -206,6 +206,7 @@ define( [
 		
 		//BEGIN loadSitRepFrame
 		loadSitRepFrame: function() {
+			console.log("Login_mobile: loadSitRepFrame");
 			dojo.create("iframe", {
 		    "src": "main_frame.html",
 		    "style": "border: 0; width: 100%; height: 100%"
